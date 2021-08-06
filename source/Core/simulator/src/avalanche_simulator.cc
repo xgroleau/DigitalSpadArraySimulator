@@ -262,17 +262,12 @@ void AvalancheSimulator::simulateCrosstalk(Particle* particle, Vector<Particle*>
 
 void AvalancheSimulator::simulateDarkCount(Vector<Particle*>& particles)
 {
-    double quenchingTime = quench->getPropertyAs<double>(IQuench::RECHARGE_DELAY) + quench->getPropertyAs<double>(IQuench::DEAD_TIME);
     Particle* lastParticle = (particles.empty() ? 0 : particles.back());//->getGlobalTime() + quenchingTime
     Vector<Particle*> darkCounts;
-    Vector<Particle*>::iterator it;
-    Particle* darkcount;
     
     dcGen->generate(lastParticle, darkCounts);
     
-    for (it = darkCounts.begin(); it != darkCounts.end();){
-        darkcount = *it;
-        Dichotomic::insert(particles, darkcount);
-        it = darkCounts.erase(it);
+    for (Particle* element: darkCounts){
+        Dichotomic::insert(particles, element);
     }
 }
